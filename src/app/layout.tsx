@@ -28,8 +28,13 @@ export default function RootLayout({
           "bg-gray-800 text-white flex flex-col h-screen"
         )}
       >
-        <header className="p-2">
-          <div className={cn(ibmPlexMono.className, "rounded p-2 border flex")}>
+        <header className="p-2 flex shadow-xl">
+          <div
+            className={cn(
+              ibmPlexMono.className,
+              "rounded p-2 border flex w-auto"
+            )}
+          >
             rnam.
           </div>
         </header>
