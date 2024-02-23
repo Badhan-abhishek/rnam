@@ -1,8 +1,9 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface Values {
-  name: string;
+  first: string;
+  last: string;
   phoneNumber: string;
   randomEmail: string;
   country: string;
@@ -30,6 +31,7 @@ export const useValuesStore = create<Store>()(
     }),
     {
       name: "values",
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );
