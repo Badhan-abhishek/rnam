@@ -28,6 +28,7 @@ export const Generator: React.FC<GeneratorProps> = ({ valueStoreKey }) => {
 
   const storeValues = allValues?.[valueStoreKey];
 
+  // Probably there is better way to handle this
   useEffect(() => {
     const getOrGenerateValues = () =>
       storeValues
@@ -40,7 +41,7 @@ export const Generator: React.FC<GeneratorProps> = ({ valueStoreKey }) => {
             ),
             randomEmail: faker.internet.email({
               provider: "yopmail.com",
-            }),
+            }).toLowerCase(),
             country: faker.location.country(),
             city: faker.location.city(),
             zipcode: faker.location.zipCode(),
@@ -49,6 +50,21 @@ export const Generator: React.FC<GeneratorProps> = ({ valueStoreKey }) => {
 
     setRandomValues(getOrGenerateValues());
   }, [storeValues, valueStoreKey]);
+
+  const handleRegen = () => {
+    setRandomValues({
+      first: faker.person.firstName(),
+      last: faker.person.lastName(),
+      phoneNumber: faker.helpers.fromRegExp(/([1-9]{3}) [0-9]{3} [0-9]{4}/),
+      randomEmail: faker.internet.email({
+        provider: "yopmail.com",
+      }).toLowerCase(),
+      country: faker.location.country(),
+      city: faker.location.city(),
+      zipcode: faker.location.zipCode(),
+      street: faker.location.street(),
+    });
+  };
 
   const currentValues = storeValues ? storeValues : randomValues;
 
@@ -117,13 +133,7 @@ export const Generator: React.FC<GeneratorProps> = ({ valueStoreKey }) => {
             >
               Persist these values
             </Button>
-            <Button
-              onClick={() => {
-                window.location.reload();
-              }}
-            >
-              Reload
-            </Button>
+            <Button onClick={handleRegen}>Reload</Button>
           </div>
         )}
       </CardFooter>
