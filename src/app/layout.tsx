@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Links } from "@/features/links";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +29,7 @@ export default function RootLayout({
           "bg-gray-800 text-white flex flex-col h-screen"
         )}
       >
-        <header className="p-2 flex shadow-xl">
+        <header className="p-2 flex shadow-xl justify-between">
           <div
             className={cn(
               ibmPlexMono.className,
@@ -36,6 +37,9 @@ export default function RootLayout({
             )}
           >
             rnam.
+          </div>
+          <div className="flex items-center">
+            <Links />
           </div>
         </header>
         {children}
