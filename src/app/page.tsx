@@ -1,89 +1,23 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { faker } from "@faker-js/faker/locale/en_US";
-import { Values, useValuesStore } from "../../lib/use-values-store";
-import { useEffect, useState } from "react";
+import { Generator } from "@/features/generator";
+import { MAX_GEN_COUNT } from "@/lib/constant";
+import { useGeneratorStore } from "@/lib/use-generator-store";
 
 export default function Home() {
-  const { values: storeValues, clearStore, setValues } = useValuesStore();
-  const [randomValues, setRandomValues] = useState<Values | null>(null);
-
-  useEffect(() => {
-    const getOrGenerateValues = () =>
-      storeValues
-        ? storeValues
-        : {
-            name: faker.person.fullName(),
-            phoneNumber: faker.phone.number(),
-            randomEmail: faker.internet.email({
-              provider: "yopmail.com",
-            }),
-            country: faker.location.country(),
-            city: faker.location.city(),
-            zipcode: faker.location.zipCode(),
-            street: faker.location.street(),
-          };
-
-    setRandomValues(getOrGenerateValues());
-  }, [storeValues]);
-
-  const currentValues = storeValues ? storeValues : randomValues;
-
+  const { addGen, gens } = useGeneratorStore();
   return (
-    <main className="grid place-content-center flex-1">
-      <Card>
-        <CardHeader>
-          <CardTitle>{currentValues?.name}</CardTitle>
-          <CardDescription>{currentValues?.phoneNumber}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>
-            {currentValues?.street}, {currentValues?.city},{" "}
-            {currentValues?.country} {currentValues?.zipcode}
-          </p>
-        </CardContent>
-        <CardContent>
-          <p>{currentValues?.randomEmail}</p>
-        </CardContent>
-        <CardFooter>
-          {storeValues ? (
-            <Button
-              onClick={() => {
-                clearStore();
-              }}
-            >
-              Clear Persist Store
-            </Button>
-          ) : (
-            <div className="flex gap-2">
-              <Button
-                onClick={() => {
-                  if (!currentValues) return;
-                  setValues(currentValues);
-                }}
-              >
-                Persist these values
-              </Button>
-              <Button
-                onClick={() => {
-                  window.location.reload();
-                }}
-              >
-                Reload
-              </Button>
-            </div>
-          )}
-        </CardFooter>
-      </Card>
+    <main className="grid md:grid-cols-2 lg:grid-cols-3 p-6 gap-4 container mx-auto">
+      {gens.map((gen) => {
+        return <Generator key={gen} valueStoreKey={gen} />;
+      })}
+      {gens.length === MAX_GEN_COUNT ? null : (
+        <div
+          onClick={addGen}
+          className="cursor-pointer min-h-[250px] w-full border border-dotted rounded-lg grid place-content-center"
+        >
+          +
+        </div>
+      )}
     </main>
   );
 }
